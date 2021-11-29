@@ -1,33 +1,40 @@
 package com.es.phoneshop.web.controller;
 
+import com.es.core.cart.AddToCartForm;
 import com.es.core.cart.Cart;
 import com.es.core.cart.CartService;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.es.core.exceptions.PhoneOutOfStockException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/ajaxCart")
-@Validated
 public class AjaxCartController {
-    private static final String ERROR_MESSAGE = "error";
+    private static final String WRONG_FORMAT_MESSAGE = "Wrong format";
+    private static final String OUT_OF_STOCK_MESSAGE = "Quantity is out of stock";
     @Resource
     private CartService cartService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addPhone(@RequestParam long phoneId, @RequestParam String quantity,
-                           HttpSession session) {
-        if (!quantity.matches("[0-9]+")) {
-            return ERROR_MESSAGE;
+    public String addPhone(@Valid AddToCartForm addToCartForm, BindingResult br, HttpSession session,
+                           HttpServletResponse response) {
+        if (br.hasErrors()) {
+            response.setStatus(228);
+            return WRONG_FORMAT_MESSAGE;
         }
         Cart cart = cartService.getCart(session);
-        cartService.addPhone(cart, phoneId, Long.parseLong(quantity));
+        try {
+            cartService.addPhone(cart, addToCartForm.getPhoneId(),
+                    addToCartForm.getQuantity());
+        } catch (PhoneOutOfStockException e) {
+            response.setStatus(228);
+            return OUT_OF_STOCK_MESSAGE;
+        }
         return cart.getTotalQuantity() + " items " + cart.getTotalCost();
     }
 }

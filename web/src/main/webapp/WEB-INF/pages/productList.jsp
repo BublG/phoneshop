@@ -92,12 +92,14 @@ Found
             <td>${phone.displaySizeInches}"</td>
             <td>${phone.price}$</td>
             <td>
-                <input id="${phone.id} quantity"/>
-                <div class="error-message" id="${phone.id} error"></div>
+                <form id="${phone.id}">
+                    <input name="quantity" id="${phone.id}quantity"/>
+                    <input name="phoneId" type="hidden" value="${phone.id}">
+                </form>
+                <div class="error-message" id="${phone.id}error"></div>
             </td>
             <td>
-                <button onclick="addPhoneToCart('${phone.id}',
-                        document.getElementById(${phone.id} + ' quantity').value)">
+                <button onclick="sendForm(${phone.id})">
                     Add to cart
                 </button>
             </td>
@@ -136,19 +138,23 @@ Found
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 <script>
-    function addPhoneToCart(id, quantity) {
-        $.post("${pageContext.servletContext.contextPath}" + "/ajaxCart",
+    function sendForm(id) {
+        let form = $("#" + id);
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.servletContext.contextPath}" + "/ajaxCart",
+            data: form.serialize(),
+            success: function(data, textStatus, jqXHR)
             {
-                phoneId: id,
-                quantity: quantity
-            },
-            function (data) {
-                if (data === "error") {
-                    document.getElementById(id + ' error').innerText = 'Wrong format';
+                if (jqXHR.status == 228) {
+                    document.getElementById(id + "error").innerText = data;
                 } else {
                     document.getElementById("cartParams").innerText = data;
+                    document.getElementById(id + "quantity").value = '';
+                    document.getElementById(id + "error").innerText = '';
                 }
-            });
+            }
+        });
     }
 </script>
 </body>

@@ -50,14 +50,14 @@ public class ProductListPageController {
             } else {
                 model.addAttribute(PHONES_ATTRIBUTE, phones.subList(offset, offset + PHONES_COUNT_BY_PAGE));
             }
-            model.addAttribute(PAGE_NUMBERS_ATTRIBUTE, makePageNumbers(page, maxPage));
+            model.addAttribute(PAGE_NUMBERS_ATTRIBUTE, getPageNumbers(page, maxPage));
             model.addAttribute(MAX_PAGE_ATTRIBUTE, maxPage);
         }
         model.addAttribute(HttpSessionCartService.CART_SESSION_ATTRIBUTE, cartService.getCart(session));
         return "productList";
     }
 
-    private static Deque<Integer> makePageNumbers(int page, int maxPage) {
+    private static Deque<Integer> getPageNumbers(int page, int maxPage) {
         Deque<Integer> pageNumbers = new LinkedList<>();
         pageNumbers.add(page);
         int nextPage = page + 1;

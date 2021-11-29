@@ -1,6 +1,7 @@
 package com.es.core.cart;
 
 import com.es.core.exceptions.PhoneNotFoundException;
+import com.es.core.exceptions.PhoneOutOfStockException;
 import com.es.core.model.phone.Phone;
 import com.es.core.model.phone.PhoneDao;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,11 @@ public class HttpSessionCartService implements CartService {
             Optional<CartItem> optionalCartItem = cart.getItems().stream()
                     .filter(item -> item.getPhone().getId().equals(phoneId))
                     .findAny();
-            long updatedQuantity = quantity + optionalCartItem.map(CartItem::getQuantity).orElse(0L);
+            long updatedQuantity = quantity + optionalCartItem
+                    .map(CartItem::getQuantity).orElse(0L);
+            if (updatedQuantity > phoneDao.getInStockQuantity(phoneId)) {
+                throw new PhoneOutOfStockException();
+            }
             if (optionalCartItem.isPresent()) {
                 optionalCartItem.get().setQuantity(updatedQuantity);
             } else {

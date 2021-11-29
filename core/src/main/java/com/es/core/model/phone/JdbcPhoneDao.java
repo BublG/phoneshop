@@ -23,6 +23,9 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String SELECT_ALL_QUERY_TEMPLATE = "select * from phones offset %d limit %d";
     private static final String SELECT_ALL_IN_STOCK_AND_NOT_NULL_PRICE_QUERY = "select * from phones, stocks" +
             " where phones.id = stocks.phoneId and stocks.stock > 0 and phones.price is not null";
+    private static final String SEARCH_QUERY_PART = " and lower(phones.model) like '%";
+    private static final String SORT_QUERY_PART = " order by ";
+    private static final String SELECT_QUANTITY_IN_STOCK_QUERY_TEMPLATE = "select stock from stocks where phoneId = %d";
     @Resource
     private JdbcTemplate jdbcTemplate;
 
@@ -64,15 +67,21 @@ public class JdbcPhoneDao implements PhoneDao {
         return phonesInStock;
     }
 
+    @Override
+    public long getInStockQuantity(long phoneId) {
+        return jdbcTemplate.queryForObject(String.format(SELECT_QUANTITY_IN_STOCK_QUERY_TEMPLATE,
+                phoneId), Long.class);
+    }
+
     private String getDBQueryForFindAllInStock(String query, String sortField, String sortOrder) {
-        String DBQuery = SELECT_ALL_IN_STOCK_AND_NOT_NULL_PRICE_QUERY;
+        StringBuilder DBQuery = new StringBuilder(SELECT_ALL_IN_STOCK_AND_NOT_NULL_PRICE_QUERY);
         if (query != null && !query.isEmpty()) {
-            DBQuery += " and lower(phones.model) like '%" + query.trim().toLowerCase() + "%'";
+            DBQuery.append(SEARCH_QUERY_PART).append(query.trim().toLowerCase()).append("%'");
         }
         if (sortField != null && !sortField.isEmpty()) {
-            DBQuery += " order by " + sortField + " " + sortOrder;
+            DBQuery.append(SORT_QUERY_PART).append(sortField).append(" ").append(sortOrder);
         }
-        return DBQuery;
+        return DBQuery.toString();
     }
 
     private void setPhoneColors(Phone phone) {

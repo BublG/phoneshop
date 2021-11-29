@@ -8,4 +8,5 @@ public interface PhoneDao {
     void save(Phone phone);
     List<Phone> findAll(int offset, int limit);
     List<Phone> findAllInStock(String query, String sortField, String sortOrder);
+    long getInStockQuantity(long phoneId);
 }
