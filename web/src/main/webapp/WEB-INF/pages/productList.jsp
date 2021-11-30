@@ -146,7 +146,7 @@ Found
             data: form.serialize(),
             success: function(data, textStatus, jqXHR)
             {
-                if (jqXHR.status == 228) {
+                if (jqXHR.status == 202) {
                     document.getElementById(id + "error").innerText = data;
                 } else {
                     document.getElementById("cartParams").innerText = data;

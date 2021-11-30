@@ -4,6 +4,7 @@ import com.es.core.cart.AddToCartForm;
 import com.es.core.cart.Cart;
 import com.es.core.cart.CartService;
 import com.es.core.exceptions.PhoneOutOfStockException;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class AjaxCartController {
     public String addPhone(@Valid AddToCartForm addToCartForm, BindingResult br, HttpSession session,
                            HttpServletResponse response) {
         if (br.hasErrors()) {
-            response.setStatus(228);
+            response.setStatus(HttpStatus.ACCEPTED.value());
             return WRONG_FORMAT_MESSAGE;
         }
         Cart cart = cartService.getCart(session);
@@ -32,7 +33,7 @@ public class AjaxCartController {
             cartService.addPhone(cart, addToCartForm.getPhoneId(),
                     addToCartForm.getQuantity());
         } catch (PhoneOutOfStockException e) {
-            response.setStatus(228);
+            response.setStatus(HttpStatus.ACCEPTED.value());
             return OUT_OF_STOCK_MESSAGE;
         }
         return cart.getTotalQuantity() + " items " + cart.getTotalCost();

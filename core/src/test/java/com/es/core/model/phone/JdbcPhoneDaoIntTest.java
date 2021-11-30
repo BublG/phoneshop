@@ -25,6 +25,7 @@ public class JdbcPhoneDaoIntTest {
     private static final String SAVING_PHONE_NEW_BRAND = "new Brand";
     private static final long NOT_IN_STOCK_SAMSUNG_ID = 7040L;
     private static final long IN_STOCK_SAMSUNG_ID = 7078L;
+    private static final String SAMSUNG_SEARCH = "samsung";
     @Resource
     private PhoneDao phoneDao;
 
@@ -57,7 +58,7 @@ public class JdbcPhoneDaoIntTest {
 
     @Test
     public void shouldReturnOnlyPhonesInStockAndNotNullPriceWhenInvokeFindAllInStockMethod() {
-        List<Phone> phonesInStock = phoneDao.findAllInStock("samsung", null, null);
+        List<Phone> phonesInStock = phoneDao.findAllInStock(SAMSUNG_SEARCH, null, null);
         Set<Long> inStockPhonesIds = phonesInStock.stream()
                 .map(Phone::getId)
                 .collect(Collectors.toSet());

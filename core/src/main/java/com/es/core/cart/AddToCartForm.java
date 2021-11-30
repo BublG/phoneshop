@@ -5,6 +5,7 @@ import javax.validation.constraints.Min;
 
 public class AddToCartForm {
     private Long phoneId;
+
     @Min(1)
     private Long quantity;
 
