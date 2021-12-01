@@ -10,13 +10,9 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="${pageContext.servletContext.contextPath}/js/script.js"></script>
 </head>
 <body>
-<p>
-    Hello from product list!
-</p>
-Found
-<c:out value="${phones.size()}"/> phones.
 <p>
     My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
 </p>
@@ -27,8 +23,8 @@ Found
 <table class="table table-bordered">
     <thead>
     <tr>
-        <td>Image</td>
-        <td>
+        <th>Image</th>
+        <th>
             Brand
             <tags:sortLink sort="brand" order="asc">
                 <img width="10px" height="17px"
@@ -38,8 +34,8 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>
+        </th>
+        <th>
             Model
             <tags:sortLink sort="model" order="asc">
                 <img width="10px" height="17px"
@@ -49,9 +45,9 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>Color</td>
-        <td>
+        </th>
+        <th>Color</th>
+        <th>
             Display size
             <tags:sortLink sort="displaySizeInches" order="asc">
                 <img width="10px" height="17px"
@@ -61,8 +57,8 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>
+        </th>
+        <th>
             Price
             <tags:sortLink sort="price" order="asc">
                 <img width="10px" height="17px"
@@ -72,9 +68,9 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>Quantity</td>
-        <td>Action</td>
+        </th>
+        <th>Quantity</th>
+        <th>Action</th>
     </tr>
     </thead>
     <c:forEach var="phone" items="${phones}">
@@ -83,7 +79,9 @@ Found
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
             </td>
             <td>${phone.brand}</td>
-            <td>${phone.model}</td>
+            <td>
+                    <a href="${pageContext.servletContext.contextPath}/productDetails/${phone.id}">${phone.model}</a>
+            </td>
             <td>
                 <c:forEach var="color" items="${phone.colors}">
                     ${color.code},
@@ -99,7 +97,8 @@ Found
                 <div class="error-message" id="${phone.id}error"></div>
             </td>
             <td>
-                <button onclick="sendForm(${phone.id})">
+                <button onclick="sendAddToCartForm(${phone.id},
+                        '${pageContext.servletContext.contextPath}/ajaxCart')">
                     Add to cart
                 </button>
             </td>
@@ -137,25 +136,5 @@ Found
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-<script>
-    function sendForm(id) {
-        let form = $("#" + id);
-        $.ajax({
-            type: "POST",
-            url: "${pageContext.servletContext.contextPath}" + "/ajaxCart",
-            data: form.serialize(),
-            success: function(data, textStatus, jqXHR)
-            {
-                if (jqXHR.status == 202) {
-                    document.getElementById(id + "error").innerText = data;
-                } else {
-                    document.getElementById("cartParams").innerText = data;
-                    document.getElementById(id + "quantity").value = '';
-                    document.getElementById(id + "error").innerText = '';
-                }
-            }
-        });
-    }
-</script>
 </body>
 </html>
