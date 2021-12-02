@@ -13,7 +13,9 @@
 </head>
 <body>
 <p>
-    My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
+    <a href="${pageContext.servletContext.contextPath}/cart">
+        My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
+    </a>
 </p>
 <p>
     <a href="${pageContext.servletContext.contextPath}/productList/1">Back to product list</a>

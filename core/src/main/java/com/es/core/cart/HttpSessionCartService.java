@@ -32,11 +32,7 @@ public class HttpSessionCartService implements CartService {
     @Override
     public void addPhone(Cart cart, Long phoneId, Long quantity) {
         synchronized (cart) {
-            Optional<Phone> optionalPhone = phoneDao.get(phoneId);
-            if (!optionalPhone.isPresent()) {
-                throw new PhoneNotFoundException();
-            }
-            Phone phone = optionalPhone.get();
+            Phone phone = phoneDao.get(phoneId).orElseThrow(PhoneNotFoundException::new);
             Optional<CartItem> optionalCartItem = cart.getItems().stream()
                     .filter(item -> item.getPhone().getId().equals(phoneId))
                     .findAny();
@@ -55,13 +51,25 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
-    public void update(Map<Long, Long> items) {
-        throw new UnsupportedOperationException("TODO");
+    public void update(Cart cart, Long phoneId, Long quantity) {
+        synchronized (cart) {
+            CartItem cartItem = cart.getItems().stream()
+                    .filter(item -> phoneId.equals(item.getPhone().getId()))
+                    .findAny().get();
+            if (quantity > phoneDao.getInStockQuantity(phoneId)) {
+                throw new PhoneOutOfStockException();
+            }
+            cartItem.setQuantity(quantity);
+            recalculateCart(cart);
+        }
     }
 
     @Override
-    public void remove(Long phoneId) {
-        throw new UnsupportedOperationException("TODO");
+    public void remove(Cart cart, Long phoneId) {
+        synchronized (cart) {
+            cart.getItems().removeIf(cartItem -> cartItem.getPhone().getId().equals(phoneId));
+            recalculateCart(cart);
+        }
     }
 
     private void recalculateCart(Cart cart) {

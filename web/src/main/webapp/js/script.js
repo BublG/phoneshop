@@ -16,3 +16,20 @@ function sendAddToCartForm(id, url) {
         }
     });
 }
+
+function deleteCartItem(url) {
+    let request = new XMLHttpRequest();
+    request.open('DELETE', url, false);
+    request.send();
+    window.location = '/phoneshop-web/cart';
+}
+
+function updateCart(url) {
+    let form = $('#updateForm');
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: form.serialize(),
+        async: false,
+    });
+}
