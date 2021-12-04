@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class HttpSessionCartService implements CartService {
     public static final String CART_SESSION_ATTRIBUTE = "cart";
+
     @Resource
     private PhoneDao phoneDao;
+
+    public void setPhoneDao(PhoneDao phoneDao) {
+        this.phoneDao = phoneDao;
+    }
 
     @Override
     public Cart getCart(HttpSession session) {
