@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.ResourceBundle" %>
 <html>
 <head>
     <title>Cart</title>
@@ -25,13 +26,10 @@
     <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>Display size</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Action</th>
+            <%
+                ResourceBundle resource = ResourceBundle.getBundle("application");
+                out.println(resource.getString("cartTableHead"));
+            %>
         </tr>
         </thead>
         <c:forEach var="cartItem" items="${cart.items}" varStatus="status">
@@ -50,17 +48,13 @@
                 <td>${cartItem.phone.displaySizeInches}"</td>
                 <td>${cartItem.phone.price}$</td>
                 <td>
-                    <c:set var="error" value="${errors[cartItem.phone.id]}"/>
-                    <input name="quantity" value="${not empty error ? paramValues.quantity[status.index] : cartItem.quantity}">
-                    <c:if test="${not empty error}">
-                        <div class="error-message">
-                            ${error}
-                        </div>
-                    </c:if>
+                    <input id="${cartItem.phone.id}" name="quantity" value="${cartItem.quantity}">
+                    <div id="${cartItem.phone.id}error" class="error-message"></div>
                     <input name="phoneId" value="${cartItem.phone.id}" type="hidden">
                 </td>
                 <td>
-                    <button type="button" onclick="deleteCartItem('${pageContext.servletContext.contextPath}/cart?phoneId=${cartItem.phone.id}')">
+                    <button type="button"
+                            onclick="deleteCartItem('${pageContext.servletContext.contextPath}/cart?phoneId=${cartItem.phone.id}')">
                         Delete
                     </button>
                 </td>
@@ -71,7 +65,7 @@
         Update
     </button>
 </form>
-<button>Order</button>
+<button onclick="updateCart('${pageContext.servletContext.contextPath}/cart')">Test</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>

@@ -34,6 +34,7 @@ public class ProductListPageController {
     private static final String QUERY_PARAM = "query";
     private static final String SORT_FIELD_PARAM = "sortField";
     private static final String SORT_ORDER_PARAM = "sortOrder";
+    private static final String PRODUCT_LIST_PAGE = "productList";
 
     @RequestMapping(method = RequestMethod.GET, path = "/{page}")
     public String showProductList(Model model, @PathVariable int page,
@@ -54,7 +55,7 @@ public class ProductListPageController {
             model.addAttribute(MAX_PAGE_ATTRIBUTE, maxPage);
         }
         model.addAttribute(HttpSessionCartService.CART_SESSION_ATTRIBUTE, cartService.getCart(session));
-        return "productList";
+        return PRODUCT_LIST_PAGE;
     }
 
     private static Deque<Integer> getPageNumbers(int page, int maxPage) {

@@ -23,12 +23,13 @@ public class ProductDetailsPageController {
     private CartService cartService;
 
     private static final String PHONE_ATTRIBUTE = "phone";
+    private static final String PRODUCT_DETAILS_PAGE = "productDetails";
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public String showProductDetails(Model model, @PathVariable long id, HttpSession session) {
         Phone phone = phoneDao.get(id).orElseThrow(PhoneNotFoundException::new);
         model.addAttribute(PHONE_ATTRIBUTE, phone);
         model.addAttribute(HttpSessionCartService.CART_SESSION_ATTRIBUTE, cartService.getCart(session));
-        return "productDetails";
+        return PRODUCT_DETAILS_PAGE;
     }
 }

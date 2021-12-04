@@ -1,6 +1,6 @@
 package com.es.phoneshop.web.controller;
 
-import com.es.core.cart.AddToCartForm;
+import addToCartForm.AddToCartForm;
 import com.es.core.cart.Cart;
 import com.es.core.cart.CartService;
 import com.es.core.exceptions.PhoneOutOfStockException;
