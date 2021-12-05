@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.ResourceBundle" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Cart</title>
@@ -26,10 +26,27 @@
     <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
-            <%
-                ResourceBundle resource = ResourceBundle.getBundle("application");
-                out.println(resource.getString("cartTableHead"));
-            %>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.brand')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.model')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.color')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.displaySize')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.price')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.quantity')" />
+            </th>
+            <th>
+                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.action')" />
+            </th>
         </tr>
         </thead>
         <c:forEach var="cartItem" items="${cart.items}" varStatus="status">

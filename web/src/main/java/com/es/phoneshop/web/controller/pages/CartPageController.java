@@ -1,8 +1,11 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.cart.*;
+import dto.AddToCartForm;
+import com.es.core.cart.Cart;
+import com.es.core.cart.CartService;
+import com.es.core.cart.HttpSessionCartService;
 import com.es.core.exceptions.PhoneOutOfStockException;
-import addToCartForm.AddToCartForm;
+import dto.UpdateCartResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +19,11 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/cart")
 public class CartPageController {
-    @Resource
-    private CartService cartService;
-
     private static final String WRONG_FORMAT_ERROR = "Wrong format";
     private static final String OUT_OF_STOCK_ERROR = "Quantity is out of stock";
     private static final String CART_PAGE = "cart";
+    @Resource
+    private CartService cartService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String showCart(Model model, HttpSession session) {
@@ -31,10 +33,10 @@ public class CartPageController {
 
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public Map<Long, String> updateCart(@RequestBody List<AddToCartForm> addToCartForms, HttpSession session) {
+    public UpdateCartResponse updateCart(@RequestBody List<AddToCartForm> addToCartForms, HttpSession session) {
         Cart cart = cartService.getCart(session);
         Map<Long, String> errors = new HashMap<>();
-        for (AddToCartForm addToCartForm: addToCartForms) {
+        for (AddToCartForm addToCartForm : addToCartForms) {
             long quantity = addToCartForm.getQuantity();
             if (quantity < 1) {
                 errors.put(addToCartForm.getPhoneId(), WRONG_FORMAT_ERROR);
@@ -46,7 +48,8 @@ public class CartPageController {
                 }
             }
         }
-        return errors;
+        String updatedCartStatus = cart.getTotalQuantity() + " items " + cart.getTotalCost();
+        return new UpdateCartResponse(errors, updatedCartStatus);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

@@ -36,13 +36,19 @@ function updateCart(url) {
         data: JSON.stringify(rowsArray),
         contentType: "application/json;charset=utf-8",
         async: false,
-        success: function (errors) {
+        success: function (updateCartResponse) {
+            let errorMessages = document.getElementsByClassName('error-message')
+            for (let i = 0; i < errorMessages.length; i++) {
+                errorMessages.item(i).innerHTML = '';
+            }
+            let errors = updateCartResponse['errors']
             if (JSON.stringify(errors) == JSON.stringify({})) {
                 window.location = '/phoneshop-web/cart';
             } else {
                 for (let key in errors) {
                     document.getElementById(key + 'error').innerText = errors[key];
                 }
+                document.getElementById("cartParams").innerText = updateCartResponse['cartStatus'];
             }
         }
     });

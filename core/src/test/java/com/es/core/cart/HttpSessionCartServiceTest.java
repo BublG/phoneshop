@@ -29,7 +29,6 @@ public class HttpSessionCartServiceTest {
     private HttpSessionCartService cartService;
     private Cart cart;
 
-
     @Mock
     private Phone testPhone1;
     @Mock
