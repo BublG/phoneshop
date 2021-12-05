@@ -22,67 +22,62 @@
 <p>
     <a href="${pageContext.servletContext.contextPath}/productList/1">Back to product list</a>
 </p>
-<form id="updateForm" method="post" action="${pageContext.servletContext.contextPath}/cart">
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th>
+            <spring:message code="cartPage.phone.brand"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.phone.model"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.phone.color"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.phone.displaySize"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.phone.price"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.quantity"/>
+        </th>
+        <th>
+            <spring:message code="cartPage.action"/>
+        </th>
+    </tr>
+    </thead>
+    <c:forEach var="cartItem" items="${cart.items}" varStatus="status">
         <tr>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.brand')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.model')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.color')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.displaySize')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.phone.price')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.quantity')" />
-            </th>
-            <th>
-                <spring:eval expression="@propertyConfigurer.getProperty('cartPage.action')" />
-            </th>
+            <td>${cartItem.phone.brand}</td>
+            <td>
+                <a href="${pageContext.servletContext.contextPath}/productDetails/${cartItem.phone.id}">
+                        ${cartItem.phone.model}
+                </a>
+            </td>
+            <td>
+                <c:forEach var="color" items="${cartItem.phone.colors}">
+                    ${color.code},
+                </c:forEach>
+            </td>
+            <td>${cartItem.phone.displaySizeInches}"</td>
+            <td>${cartItem.phone.price}$</td>
+            <td>
+                <input id="${cartItem.phone.id}" name="quantity" value="${cartItem.quantity}">
+                <div id="${cartItem.phone.id}error" class="error-message"></div>
+                <input name="phoneId" value="${cartItem.phone.id}" type="hidden">
+            </td>
+            <td>
+                <button type="button"
+                        onclick="deleteCartItem('${pageContext.servletContext.contextPath}/cart?phoneId=${cartItem.phone.id}')">
+                    Delete
+                </button>
+            </td>
         </tr>
-        </thead>
-        <c:forEach var="cartItem" items="${cart.items}" varStatus="status">
-            <tr>
-                <td>${cartItem.phone.brand}</td>
-                <td>
-                    <a href="${pageContext.servletContext.contextPath}/productDetails/${cartItem.phone.id}">
-                            ${cartItem.phone.model}
-                    </a>
-                </td>
-                <td>
-                    <c:forEach var="color" items="${cartItem.phone.colors}">
-                        ${color.code},
-                    </c:forEach>
-                </td>
-                <td>${cartItem.phone.displaySizeInches}"</td>
-                <td>${cartItem.phone.price}$</td>
-                <td>
-                    <input id="${cartItem.phone.id}" name="quantity" value="${cartItem.quantity}">
-                    <div id="${cartItem.phone.id}error" class="error-message"></div>
-                    <input name="phoneId" value="${cartItem.phone.id}" type="hidden">
-                </td>
-                <td>
-                    <button type="button"
-                            onclick="deleteCartItem('${pageContext.servletContext.contextPath}/cart?phoneId=${cartItem.phone.id}')">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
-    <button>
-        Update
-    </button>
-</form>
-<button onclick="updateCart('${pageContext.servletContext.contextPath}/cart')">Test</button>
+    </c:forEach>
+</table>
+<button onclick="updateCart('${pageContext.servletContext.contextPath}/cart')">Update</button>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
