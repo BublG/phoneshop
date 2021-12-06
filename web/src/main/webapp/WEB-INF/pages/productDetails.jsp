@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>ProductDetails</title>
@@ -38,37 +39,37 @@
             </button>
         </div>
         <div class="col">
-            <h3>Display</h3>
+            <h3><spring:message code="productDetailsPage.section.display"/></h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Size</td>
+                    <td><spring:message code="productDetailsPage.display.size"/></td>
                     <td>${phone.displaySizeInches}"</td>
                 </tr>
                 <tr>
-                    <td>Resolution</td>
+                    <td><spring:message code="productDetailsPage.display.resolution"/></td>
                     <td>${phone.displayResolution}</td>
                 </tr>
                 <tr>
-                    <td>Technology</td>
+                    <td><spring:message code="productDetailsPage.display.technology"/></td>
                     <td>${phone.displayTechnology}</td>
                 </tr>
                 <tr>
-                    <td>Pixel density</td>
+                    <td><spring:message code="productDetailsPage.display.pixelDensity"/></td>
                     <td>${phone.pixelDensity}</td>
                 </tr>
             </table>
-            <h3>Dimensions & weight</h3>
+            <h3><spring:message code="productDetailsPage.section.dimensionsAndWeight"/></h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Length</td>
+                    <td><spring:message code="productDetailsPage.dimensionsAndWeight.length"/></td>
                     <td>${phone.lengthMm}mm</td>
                 </tr>
                 <tr>
-                    <td>Width</td>
+                    <td><spring:message code="productDetailsPage.dimensionsAndWeight.width"/></td>
                     <td>${phone.widthMm}mm</td>
                 </tr>
                 <tr>
-                    <td>Color</td>
+                    <td><spring:message code="productDetailsPage.dimensionsAndWeight.color"/></td>
                     <td>
                         <c:if test="${not empty phone.colors}">
                             ${phone.colors.toArray()[0].code}
@@ -76,40 +77,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Weight</td>
+                    <td><spring:message code="productDetailsPage.dimensionsAndWeight.weight"/></td>
                     <td>${phone.weightGr}g</td>
                 </tr>
             </table>
-            <h3>Camera</h3>
+            <h3><spring:message code="productDetailsPage.section.camera"/></h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Front</td>
+                    <td><spring:message code="productDetailsPage.camera.front"/></td>
                     <td>${phone.frontCameraMegapixels} megapixels</td>
                 </tr>
                 <tr>
-                    <td>Back</td>
+                    <td><spring:message code="productDetailsPage.camera.back"/></td>
                     <td>${phone.backCameraMegapixels} megapixels</td>
                 </tr>
             </table>
-            <h3>Battery</h3>
+            <h3><spring:message code="productDetailsPage.section.battery"/></h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Talk time</td>
+                    <td><spring:message code="productDetailsPage.battery.talkTime"/></td>
                     <td>${phone.talkTimeHours} hours</td>
                 </tr>
                 <tr>
-                    <td>Stand by time</td>
+                    <td><spring:message code="productDetailsPage.battery.standByTime"/></td>
                     <td>${phone.standByTimeHours} hours</td>
                 </tr>
                 <tr>
-                    <td>Battery capacity</td>
+                    <td><spring:message code="productDetailsPage.battery.capacity"/></td>
                     <td>${phone.batteryCapacityMah}mAh</td>
                 </tr>
             </table>
-            <h3>Other</h3>
+            <h3><spring:message code="productDetailsPage.section.other"/></h3>
             <table class="table table-bordered">
                 <tr>
-                    <td>Colors</td>
+                    <td><spring:message code="productDetailsPage.other.colors"/></td>
                     <td>
                         <c:forEach var="color" items="${phone.colors}">
                             ${color.code},
@@ -117,11 +118,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Device type</td>
+                    <td><spring:message code="productDetailsPage.other.deviceType"/></td>
                     <td>${phone.deviceType}</td>
                 </tr>
                 <tr>
-                    <td>Bluetooth</td>
+                    <td><spring:message code="productDetailsPage.other.bluetooth"/></td>
                     <td>${phone.bluetooth}</td>
                 </tr>
             </table>

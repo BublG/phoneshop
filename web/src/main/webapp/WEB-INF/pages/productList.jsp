@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>ProductList</title>
@@ -25,9 +26,9 @@
 <table class="table table-bordered">
     <thead>
     <tr>
-        <th>Image</th>
+        <th><spring:message code="productListPage.phone.image"/></th>
         <th>
-            Brand
+            <spring:message code="productListPage.phone.brand"/>
             <tags:sortLink sort="brand" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -38,7 +39,7 @@
             </tags:sortLink>
         </th>
         <th>
-            Model
+            <spring:message code="productListPage.phone.model"/>
             <tags:sortLink sort="model" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -48,9 +49,9 @@
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
         </th>
-        <th>Color</th>
+        <th><spring:message code="productListPage.phone.color"/></th>
         <th>
-            Display size
+            <spring:message code="productListPage.phone.displaySize"/>
             <tags:sortLink sort="displaySizeInches" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -61,7 +62,7 @@
             </tags:sortLink>
         </th>
         <th>
-            Price
+            <spring:message code="productListPage.phone.price"/>
             <tags:sortLink sort="price" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -71,8 +72,8 @@
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
         </th>
-        <th>Quantity</th>
-        <th>Action</th>
+        <th><spring:message code="productListPage.quantity"/></th>
+        <th><spring:message code="productListPage.action"/></th>
     </tr>
     </thead>
     <c:forEach var="phone" items="${phones}">
