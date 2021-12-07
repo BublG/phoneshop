@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>ProductList</title>
@@ -10,15 +11,13 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="${pageContext.servletContext.contextPath}/js/script.js"></script>
 </head>
 <body>
 <p>
-    Hello from product list!
-</p>
-Found
-<c:out value="${phones.size()}"/> phones.
-<p>
-    My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
+    <a href="${pageContext.servletContext.contextPath}/cart">
+        My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
+    </a>
 </p>
 <form action="${pageContext.servletContext.contextPath}/productList/1">
     <input name="query" value="${param.query}">
@@ -27,9 +26,9 @@ Found
 <table class="table table-bordered">
     <thead>
     <tr>
-        <td>Image</td>
-        <td>
-            Brand
+        <th><spring:message code="productListPage.phone.image"/></th>
+        <th>
+            <spring:message code="productListPage.phone.brand"/>
             <tags:sortLink sort="brand" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -38,9 +37,9 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>
-            Model
+        </th>
+        <th>
+            <spring:message code="productListPage.phone.model"/>
             <tags:sortLink sort="model" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -49,10 +48,10 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>Color</td>
-        <td>
-            Display size
+        </th>
+        <th><spring:message code="productListPage.phone.color"/></th>
+        <th>
+            <spring:message code="productListPage.phone.displaySize"/>
             <tags:sortLink sort="displaySizeInches" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -61,9 +60,9 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>
-            Price
+        </th>
+        <th>
+            <spring:message code="productListPage.phone.price"/>
             <tags:sortLink sort="price" order="asc">
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-up-solid.svg">
@@ -72,9 +71,9 @@ Found
                 <img width="10px" height="17px"
                      src="${pageContext.servletContext.contextPath}/images/long-arrow-alt-down-solid.svg">
             </tags:sortLink>
-        </td>
-        <td>Quantity</td>
-        <td>Action</td>
+        </th>
+        <th><spring:message code="productListPage.quantity"/></th>
+        <th><spring:message code="productListPage.action"/></th>
     </tr>
     </thead>
     <c:forEach var="phone" items="${phones}">
@@ -83,7 +82,9 @@ Found
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
             </td>
             <td>${phone.brand}</td>
-            <td>${phone.model}</td>
+            <td>
+                    <a href="${pageContext.servletContext.contextPath}/productDetails/${phone.id}">${phone.model}</a>
+            </td>
             <td>
                 <c:forEach var="color" items="${phone.colors}">
                     ${color.code},
@@ -99,7 +100,8 @@ Found
                 <div class="error-message" id="${phone.id}error"></div>
             </td>
             <td>
-                <button onclick="sendForm(${phone.id})">
+                <button onclick="sendAddToCartForm(${phone.id},
+                        '${pageContext.servletContext.contextPath}/ajaxCart')">
                     Add to cart
                 </button>
             </td>
@@ -137,25 +139,5 @@ Found
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-<script>
-    function sendForm(id) {
-        let form = $("#" + id);
-        $.ajax({
-            type: "POST",
-            url: "${pageContext.servletContext.contextPath}" + "/ajaxCart",
-            data: form.serialize(),
-            success: function(data, textStatus, jqXHR)
-            {
-                if (jqXHR.status == 202) {
-                    document.getElementById(id + "error").innerText = data;
-                } else {
-                    document.getElementById("cartParams").innerText = data;
-                    document.getElementById(id + "quantity").value = '';
-                    document.getElementById(id + "error").innerText = '';
-                }
-            }
-        });
-    }
-</script>
 </body>
 </html>

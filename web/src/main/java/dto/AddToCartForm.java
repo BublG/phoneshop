@@ -1,13 +1,24 @@
-package com.es.core.cart;
+package dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Min;
+import java.io.Serializable;
 
-public class AddToCartForm {
+@JsonDeserialize(using = AddToCartFormDeserializer.class)
+public class AddToCartForm implements Serializable {
     private Long phoneId;
 
     @Min(1)
     private Long quantity;
+
+    public AddToCartForm() {
+    }
+
+    public AddToCartForm(Long phoneId, Long quantity) {
+        this.phoneId = phoneId;
+        this.quantity = quantity;
+    }
 
     public Long getPhoneId() {
         return phoneId;
