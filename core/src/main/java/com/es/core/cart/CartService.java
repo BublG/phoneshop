@@ -17,4 +17,6 @@ public interface CartService {
     void update(Cart cart, Long phoneId, Long quantity);
 
     void remove(Cart cart, Long phoneId);
+
+    void clearCart(HttpSession session);
 }

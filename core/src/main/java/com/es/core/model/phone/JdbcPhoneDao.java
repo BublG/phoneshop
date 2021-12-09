@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +25,8 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String SEARCH_QUERY_PART = " and lower(phones.model) like '%";
     private static final String SORT_QUERY_PART = " order by ";
     private static final String SELECT_QUANTITY_IN_STOCK_QUERY_TEMPLATE = "select stock from stocks where phoneId = %d";
+    private static final String UPDATE_PHONE_STOCK_QUERY = "UPDATE stocks set stock = ? where phoneId = ?";
+
     @Resource
     private JdbcTemplate jdbcTemplate;
 
@@ -71,6 +72,12 @@ public class JdbcPhoneDao implements PhoneDao {
     public long getInStockQuantity(long phoneId) {
         return jdbcTemplate.queryForObject(String.format(SELECT_QUANTITY_IN_STOCK_QUERY_TEMPLATE,
                 phoneId), Long.class);
+    }
+
+    @Override
+    public void decreaseStock(Long phoneId, Long quantity) {
+        long newStock = getInStockQuantity(phoneId) - quantity;
+        jdbcTemplate.update(UPDATE_PHONE_STOCK_QUERY, newStock, phoneId);
     }
 
     private String getDBQueryForFindAllInStock(String query, String sortField, String sortOrder) {
