@@ -18,10 +18,11 @@ public class OrderOverviewPageController {
     private OrderDao orderDao;
 
     private static final String ORDER_ATTRIBUTE = "order";
+    private static final String ORDER_OVERVIEW_PAGE = "orderOverview";
 
     @RequestMapping(method = RequestMethod.GET, path = "{secureId}")
     public String showPlacedOrder(Model model, @PathVariable String secureId) {
         model.addAttribute(ORDER_ATTRIBUTE, orderDao.getBySecureId(secureId).orElseThrow(OrderNotFoundException::new));
-        return "orderOverview";
+        return ORDER_OVERVIEW_PAGE;
     }
 }

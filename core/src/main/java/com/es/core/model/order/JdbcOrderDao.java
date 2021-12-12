@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.PreparedStatement;
@@ -47,19 +46,19 @@ public class JdbcOrderDao implements OrderDao {
     public void save(Order order) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection
+            PreparedStatement preparedStatement = connection
                     .prepareStatement(INSERT_ORDER_QUERY);
-            ps.setString(1, order.getSecureId());
-            ps.setObject(2, order.getSubtotal());
-            ps.setObject(3, order.getDeliveryPrice());
-            ps.setObject(4, order.getTotalPrice());
-            ps.setString(5, order.getFirstName());
-            ps.setString(6, order.getLastName());
-            ps.setString(7, order.getDeliveryAddress());
-            ps.setString(8, order.getContactPhoneNo());
-            ps.setString(9, order.getAdditionalInformation());
-            ps.setString(10, order.getStatus().toString());
-            return ps;
+            preparedStatement.setString(1, order.getSecureId());
+            preparedStatement.setObject(2, order.getSubtotal());
+            preparedStatement.setObject(3, order.getDeliveryPrice());
+            preparedStatement.setObject(4, order.getTotalPrice());
+            preparedStatement.setString(5, order.getFirstName());
+            preparedStatement.setString(6, order.getLastName());
+            preparedStatement.setString(7, order.getDeliveryAddress());
+            preparedStatement.setString(8, order.getContactPhoneNo());
+            preparedStatement.setString(9, order.getAdditionalInformation());
+            preparedStatement.setString(10, order.getStatus().toString());
+            return preparedStatement;
         }, keyHolder);
         order.setId(keyHolder.getKey().longValue());
         jdbcTemplate.batchUpdate(INSERT_ORDER_ITEM_QUERY, order.getOrderItems(), order.getOrderItems().size(),

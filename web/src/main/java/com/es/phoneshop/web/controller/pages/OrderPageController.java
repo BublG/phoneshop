@@ -8,7 +8,6 @@ import com.es.core.order.OutOfStockException;
 import dto.OrderForm;
 import dto.PlaceOrderErrors;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ public class OrderPageController {
     private CartService cartService;
 
     private static final String ORDER_PAGE = "order";
-    private static final String REDIRECT_TO_ORDER_PAGE = "redirect:/order";
     private static final String REDIRECT_TO_ORDER_OVERVIEW_PAGE = "redirect:/orderOverview/%s";
 
     private static final String ORDER_ATTRIBUTE = "order";
@@ -44,7 +42,7 @@ public class OrderPageController {
     public String getOrder(ModelMap model, HttpSession session) {
         Cart cart = cartService.getCart(session);
         model.addAttribute(ORDER_ATTRIBUTE, orderService.createOrder(cart));
-        return "order";
+        return ORDER_PAGE;
     }
 
     @RequestMapping(method = RequestMethod.POST)
