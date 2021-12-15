@@ -2,7 +2,6 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.cart.CartService;
 import com.es.core.cart.HttpSessionCartService;
-import com.es.core.model.phone.Phone;
 import com.es.core.model.phone.PhoneDao;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +14,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/productList")
 public class ProductListPageController {
-    @Resource
-    private PhoneDao phoneDao;
-    @Resource
-    private CartService cartService;
-
     private static final int PHONES_COUNT_BY_PAGE = 10;
     private static final int MAX_PAGES_NUMBER = 9;
     private static final String PHONES_ATTRIBUTE = "phones";
@@ -35,28 +28,10 @@ public class ProductListPageController {
     private static final String SORT_FIELD_PARAM = "sortField";
     private static final String SORT_ORDER_PARAM = "sortOrder";
     private static final String PRODUCT_LIST_PAGE = "productList";
-
-    @RequestMapping(method = RequestMethod.GET, path = "/{page}")
-    public String showProductList(Model model, @PathVariable int page,
-                                  @RequestParam(required = false) Map<String, String> params,
-                                  HttpSession session) {
-        int offset = PHONES_COUNT_BY_PAGE * (page - 1);
-        List<Phone> phones = phoneDao.findAllInStock(params.get(QUERY_PARAM),
-                params.get(SORT_FIELD_PARAM), params.get(SORT_ORDER_PARAM));
-        int maxPage = phones.size() % PHONES_COUNT_BY_PAGE == 0 ? phones.size() / PHONES_COUNT_BY_PAGE :
-                phones.size() / PHONES_COUNT_BY_PAGE + 1;
-        if (phones.size() != 0) {
-            if (page == maxPage) {
-                model.addAttribute(PHONES_ATTRIBUTE, phones.subList(offset, phones.size()));
-            } else {
-                model.addAttribute(PHONES_ATTRIBUTE, phones.subList(offset, offset + PHONES_COUNT_BY_PAGE));
-            }
-            model.addAttribute(PAGE_NUMBERS_ATTRIBUTE, getPageNumbers(page, maxPage));
-            model.addAttribute(MAX_PAGE_ATTRIBUTE, maxPage);
-        }
-        model.addAttribute(HttpSessionCartService.CART_SESSION_ATTRIBUTE, cartService.getCart(session));
-        return PRODUCT_LIST_PAGE;
-    }
+    @Resource
+    private PhoneDao phoneDao;
+    @Resource
+    private CartService cartService;
 
     private static Deque<Integer> getPageNumbers(int page, int maxPage) {
         Deque<Integer> pageNumbers = new LinkedList<>();
@@ -72,5 +47,21 @@ public class ProductListPageController {
             }
         }
         return pageNumbers;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{page}")
+    public String showProductList(Model model, @PathVariable int page,
+                                  @RequestParam(required = false) Map<String, String> params,
+                                  HttpSession session) {
+        int offset = PHONES_COUNT_BY_PAGE * (page - 1);
+        long inStockPhonesQuantity = phoneDao.getInStockPhonesQuantity(params.get(QUERY_PARAM));
+        int maxPage = (int) (inStockPhonesQuantity % PHONES_COUNT_BY_PAGE == 0 ? inStockPhonesQuantity / PHONES_COUNT_BY_PAGE :
+                inStockPhonesQuantity / PHONES_COUNT_BY_PAGE + 1);
+        model.addAttribute(PHONES_ATTRIBUTE, phoneDao.findPhonesInStock(params.get(QUERY_PARAM),
+                params.get(SORT_FIELD_PARAM), params.get(SORT_ORDER_PARAM), offset, PHONES_COUNT_BY_PAGE));
+        model.addAttribute(PAGE_NUMBERS_ATTRIBUTE, getPageNumbers(page, maxPage));
+        model.addAttribute(MAX_PAGE_ATTRIBUTE, maxPage);
+        model.addAttribute(HttpSessionCartService.CART_SESSION_ATTRIBUTE, cartService.getCart(session));
+        return PRODUCT_LIST_PAGE;
     }
 }

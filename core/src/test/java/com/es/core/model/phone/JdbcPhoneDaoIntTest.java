@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @ContextConfiguration("classpath:context/applicationContext-core.xml")
 @Sql({"/db/schema.sql", "classpath:db/demodata-phones.sql"})
 public class JdbcPhoneDaoIntTest {
+    private static final int OFFSET = 0;
+    private static final int LIMIT = 2000;
     private static final long GETTING_PHONE_ID = 1011L;
     private static final String GETTING_PHONE_BRAND = "ARCHOS";
     private static final int GETTING_PHONE_COLORS_COUNT = 3;
@@ -58,7 +60,7 @@ public class JdbcPhoneDaoIntTest {
 
     @Test
     public void shouldReturnOnlyPhonesInStockAndNotNullPriceWhenInvokeFindAllInStockMethod() {
-        List<Phone> phonesInStock = phoneDao.findAllInStock(SAMSUNG_SEARCH, null, null);
+        List<Phone> phonesInStock = phoneDao.findPhonesInStock(SAMSUNG_SEARCH, null, null, OFFSET, LIMIT);
         Set<Long> inStockPhonesIds = phonesInStock.stream()
                 .map(Phone::getId)
                 .collect(Collectors.toSet());
