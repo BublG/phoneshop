@@ -1,6 +1,7 @@
 package com.es.core.model.order;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class Order
@@ -23,6 +24,7 @@ public class Order
     private String deliveryAddress;
     private String contactPhoneNo;
     private String additionalInformation;
+    private Date created;
 
     private OrderStatus status;
 
@@ -112,6 +114,14 @@ public class Order
 
     public void setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public String getSecureId() {

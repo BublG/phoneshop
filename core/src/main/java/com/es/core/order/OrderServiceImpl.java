@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
             }
             order.setSecureId(UUID.randomUUID().toString());
             order.setStatus(OrderStatus.NEW);
+            order.setCreated(new Date());
             orderDao.save(order);
         }
     }
