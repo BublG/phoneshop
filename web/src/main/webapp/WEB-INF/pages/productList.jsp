@@ -15,6 +15,9 @@
 </head>
 <body>
 <p>
+    <tags:loginHeader/>
+</p>
+<p>
     <a href="${pageContext.servletContext.contextPath}/cart">
         My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
     </a>

@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
 </head>
 <body>
+<p>
+    <tags:loginHeader/>
+</p>
 <h1>Order details</h1>
 <h4>Order number: ${order.id}</h4>
 <h4>Order status: ${order.status}</h4>

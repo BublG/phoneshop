@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <title>OrderList</title>
@@ -12,6 +13,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<p>
+    <tags:loginHeader/>
+</p>
+<p>
+    <a href="${pageContext.servletContext.contextPath}/productList/1">Back to product list</a>
+</p>
 <h1>Orders</h1>
 <table class="table table-bordered table-striped table-hover">
     <thead>

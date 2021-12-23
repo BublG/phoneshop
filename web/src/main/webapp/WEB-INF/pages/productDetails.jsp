@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <title>ProductDetails</title>
@@ -13,6 +14,9 @@
     <script src="${pageContext.servletContext.contextPath}/js/script.js"></script>
 </head>
 <body>
+<p>
+    <tags:loginHeader/>
+</p>
 <p>
     <a href="${pageContext.servletContext.contextPath}/cart">
         My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$

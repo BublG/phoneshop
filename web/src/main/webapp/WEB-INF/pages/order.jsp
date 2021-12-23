@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <title>Order</title>
@@ -11,6 +12,9 @@
     <link rel="stylesheet" href="${pageContext.servletContext.contextPath}/styles/main.css">
 </head>
 <body>
+<p>
+    <tags:loginHeader/>
+</p>
 <h1>Order</h1>
 <p>
     <a href="${pageContext.servletContext.contextPath}/productList/1">Back to product list</a>
