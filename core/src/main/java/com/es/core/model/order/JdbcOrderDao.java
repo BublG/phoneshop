@@ -17,20 +17,26 @@ import java.util.Optional;
 public class JdbcOrderDao implements OrderDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
-
     @Resource
     private PhoneDao phoneDao;
 
     private static final String INSERT_ORDER_QUERY = "insert into orders (secureId, subtotal, deliveryPrice, totalPrice," +
-            "firstName, lastName, deliveryAddress, contactPhoneNo, additionalInformation, status) " +
-            "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "firstName, lastName, deliveryAddress, contactPhoneNo, additionalInformation, created, status) " +
+            "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ORDER_BY_SECURE_ID_QUERY = "select * from orders where secureId = ?";
     private static final String INSERT_ORDER_ITEM_QUERY = "insert into orderItems (phoneId, orderId, quantity) values (?, ?, ?)";
     private static final String SELECT_ORDER_ITEMS_QUERY = "select * from orderItems where orderId = ?";
+    private static final String SELECT_ALL_ORDERS_QUERY = "select * from orders limit ? offset ?";
+    private static final String SELECT_ORDERS_QUANTITY_QUERY = "select count(*) from orders";
+    private static final String SELECT_ORDER_BY_ID_QUERY = "select * from orders where id = ?";
+    private static final String UPDATE_STATUS_QUERY = "update orders set status = ? where id = ?";
 
     @Override
     public Optional<Order> get(Long id) {
-        return Optional.empty();
+        Optional<Order> order = Optional.ofNullable(jdbcTemplate.queryForObject(SELECT_ORDER_BY_ID_QUERY, new Object[]{id},
+                BeanPropertyRowMapper.newInstance(Order.class)));
+        order.ifPresent(this::setOrderItems);
+        return order;
     }
 
     @Override
@@ -57,7 +63,8 @@ public class JdbcOrderDao implements OrderDao {
             preparedStatement.setString(7, order.getDeliveryAddress());
             preparedStatement.setString(8, order.getContactPhoneNo());
             preparedStatement.setString(9, order.getAdditionalInformation());
-            preparedStatement.setString(10, order.getStatus().toString());
+            preparedStatement.setObject(10, order.getCreated());
+            preparedStatement.setString(11, order.getStatus().toString());
             return preparedStatement;
         }, keyHolder);
         order.setId(keyHolder.getKey().longValue());
@@ -69,6 +76,24 @@ public class JdbcOrderDao implements OrderDao {
                 }));
         order.getOrderItems()
                 .forEach(orderItem -> phoneDao.decreaseStock(orderItem.getPhone().getId(), orderItem.getQuantity()));
+    }
+
+    @Override
+    public List<Order> findAll(int offset, int limit) {
+        List<Order> orders = jdbcTemplate.query(SELECT_ALL_ORDERS_QUERY, new Object[]{limit, offset},
+                new BeanPropertyRowMapper<>(Order.class));
+        orders.forEach(this::setOrderItems);
+        return orders;
+    }
+
+    @Override
+    public long getOrdersQuantity() {
+        return jdbcTemplate.queryForObject(SELECT_ORDERS_QUANTITY_QUERY, Long.class);
+    }
+
+    @Override
+    public void updateStatus(long id, OrderStatus status) {
+        jdbcTemplate.update(UPDATE_STATUS_QUERY, status.toString(), id);
     }
 
     private void setOrderItems(Order order) {

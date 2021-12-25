@@ -67,6 +67,7 @@ create table orders (
   deliveryAddress VARCHAR(50),
   contactPhoneNo VARCHAR(50),
   additionalInformation VARCHAR(200),
+  created DATETIME,
   status VARCHAR(10)
 );
 
