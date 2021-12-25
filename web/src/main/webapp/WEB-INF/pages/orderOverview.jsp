@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Order overview</title>
@@ -14,8 +15,8 @@
     <tags:loginHeader/>
 </p>
 <h1>Order overview</h1>
-<h2>Thank you for your order</h2>
-<h4>Order number: ${order.id}</h4>
+<h2><spring:message code="orderOverviewPage.thanksForOrder"/></h2>
+<h4><spring:message code="orderDetailsPage.orderNumber"/> ${order.id}</h4>
 <p>
     <a href="${pageContext.servletContext.contextPath}/productList/1">Back to product list</a>
 </p>

@@ -17,6 +17,7 @@ public class OrdersPageController {
     private static final String ORDERS_ATTRIBUTE = "orders";
     private static final String MAX_PAGE_ATTRIBUTE = "maxPage";
     private static final String PAGE_NUMBERS_ATTRIBUTE = "pageNumbers";
+    private static final String ORDER_LIST_PAGE = "orderList";
     private static final int MAX_DISPLAYED_PAGES = 9;
     @Resource
     private OrderDao orderDao;
@@ -30,6 +31,6 @@ public class OrdersPageController {
         model.addAttribute(MAX_PAGE_ATTRIBUTE, maxPage);
         model.addAttribute(PAGE_NUMBERS_ATTRIBUTE, Pagination.getPageNumbers(page, maxPage, MAX_DISPLAYED_PAGES));
         model.addAttribute(ORDERS_ATTRIBUTE, orderDao.findAll(offset, ORDERS_COUNT_BY_PAGE));
-        return "orderList";
+        return ORDER_LIST_PAGE;
     }
 }

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Title</title>
@@ -15,11 +16,11 @@
         <form action="${pageContext.servletContext.contextPath}/login" method='POST'>
             <table>
                 <tr>
-                    <td>User:</td>
+                    <td><spring:message code="loginPage.user"/></td>
                     <td><input type="text" name="username"></td>
                 </tr>
                 <tr>
-                    <td>Password:</td>
+                    <td><spring:message code="loginPage.password"/></td>
                     <td><input type="password" name="password"/></td>
                 </tr>
             </table>

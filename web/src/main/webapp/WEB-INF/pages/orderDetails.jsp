@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Order details</title>
@@ -14,8 +15,8 @@
     <tags:loginHeader/>
 </p>
 <h1>Order details</h1>
-<h4>Order number: ${order.id}</h4>
-<h4>Order status: ${order.status}</h4>
+<h4><spring:message code="orderDetailsPage.orderNumber"/> ${order.id}</h4>
+<h4><spring:message code="orderDetailsPage.orderStatus"/> ${order.status}</h4>
 <tags:orderOverview order="${order}"/>
 <div class="row">
     <div class="col">

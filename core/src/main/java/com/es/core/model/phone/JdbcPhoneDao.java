@@ -1,5 +1,6 @@
 package com.es.core.model.phone;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -87,7 +88,7 @@ public class JdbcPhoneDao implements PhoneDao {
     @Override
     public long getInStockPhonesQuantity(String query) {
         StringBuilder selectInStockCountQuery = new StringBuilder(SELECT_IN_STOCK_PHONES_COUNT_QUERY);
-        if (query != null && !query.isEmpty()) {
+        if (!StringUtils.isBlank(query)) {
             selectInStockCountQuery.append(SEARCH_QUERY_PART).append(query.trim().toLowerCase()).append("%'");
         }
         return jdbcTemplate.queryForObject(selectInStockCountQuery.toString(), Long.class);
@@ -96,10 +97,10 @@ public class JdbcPhoneDao implements PhoneDao {
     private String getDBQueryForFindPhonesInStock(String query, String sortField, String sortOrder,
                                                   int offset, int limit) {
         StringBuilder DBQuery = new StringBuilder(SELECT_ALL_IN_STOCK_AND_NOT_NULL_PRICE_QUERY);
-        if (query != null && !query.isEmpty()) {
+        if (!StringUtils.isBlank(query)) {
             DBQuery.append(SEARCH_QUERY_PART).append(query.trim().toLowerCase()).append("%'");
         }
-        if (sortField != null && !sortField.isEmpty()) {
+        if (!StringUtils.isEmpty(sortField)) {
             DBQuery.append(SORT_QUERY_PART).append(sortField).append(" ").append(sortOrder);
         }
         return DBQuery.append(LIMIT_QUERY_PART).append(limit).append(OFFSET_QUERY_PART).append(offset).toString();

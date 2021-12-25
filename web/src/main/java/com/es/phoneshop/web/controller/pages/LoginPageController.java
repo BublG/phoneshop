@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginPageController {
     private static final String ERROR_ATTRIBUTE = "error";
     private static final String ERROR_TEXT = "Wrong name or password";
+    private static final String LOGIN_PAGE = "login";
 
     @RequestMapping(method = RequestMethod.GET)
     public String showLoginPage(@RequestParam(required = false) boolean error, Model model)
@@ -18,6 +19,6 @@ public class LoginPageController {
         if (error) {
             model.addAttribute(ERROR_ATTRIBUTE, ERROR_TEXT);
         }
-        return "login";
+        return LOGIN_PAGE;
     }
 }
