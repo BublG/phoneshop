@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class JdbcPhoneDao implements PhoneDao {
     private static final String SELECT_PHONE_BY_ID_QUERY = "select * from phones where id = ?";
+    private static final String SELECT_PHONE_BY_MODEL_QUERY = "select * from phones where model = ?";
     private static final String SELECT_COLOR_ID_BY_PHONE_ID_QUERY = "select colorId from phone2color" +
             " where phoneId = ?";
     private static final String SELECT_COLOR_BY_ID_QUERY = "select * from colors where id = ?";
@@ -41,6 +42,18 @@ public class JdbcPhoneDao implements PhoneDao {
                         BeanPropertyRowMapper.newInstance(Phone.class)));
         phone.ifPresent(this::setPhoneColors);
         return phone;
+    }
+
+    @Override
+    public Phone getPhoneByModel(String model) {
+        List<Phone> phones = jdbcTemplate.query(SELECT_PHONE_BY_MODEL_QUERY, new Object[]{model},
+                new BeanPropertyRowMapper<>(Phone.class));
+        if (phones.size() > 0) {
+            Phone phone = phones.get(0);
+            setPhoneColors(phone);
+            return phone;
+        }
+        return null;
     }
 
     public void save(final Phone phone) {

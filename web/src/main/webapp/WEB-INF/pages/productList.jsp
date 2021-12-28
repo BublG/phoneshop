@@ -22,6 +22,9 @@
         My cart: <span id="cartParams">${cart.totalQuantity} items ${cart.totalCost}</span>$
     </a>
 </p>
+<p>
+    <a href="${pageContext.servletContext.contextPath}/quickAdding">Quick add to cart</a>
+</p>
 <form action="${pageContext.servletContext.contextPath}/productList/1">
     <input name="query" value="${param.query}">
     <button>Search</button>

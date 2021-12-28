@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface PhoneDao {
     Optional<Phone> get(Long key);
+    Phone getPhoneByModel(String model);
     void save(Phone phone);
     List<Phone> findAll(int offset, int limit);
     List<Phone> findPhonesInStock(String query, String sortField, String sortOrder, int offset, int limit);
